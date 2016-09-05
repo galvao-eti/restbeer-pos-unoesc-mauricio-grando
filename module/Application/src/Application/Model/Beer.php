@@ -76,6 +76,11 @@ class Beer
 
         return $inputFilter;
     }
+
+    public function getArrayCopy() {
+        return get_object_vars($this);
+    }
+
     //usado pelo TableGateway
     public function exchangeArray($data)
     {

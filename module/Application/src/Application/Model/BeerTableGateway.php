@@ -37,13 +37,23 @@ class BeerTableGateway
 
          $id = (int) $beer->id;
          if ($id == 0) {
-             $this->tableGateway->insert($data);
+            $this->tableGateway->insert($data);
+
          } else {
-             if ($this->get($id)) {
-                 $this->tableGateway->update($data, array('id' => $id));
-             } else {
-                 throw new \Exception('Beer não existe');
-             }
+            $beer = $tableGateway->get($id);
+
+            if ($this->get($id)) {
+                $form->bind($beer);
+                /* muda o texto do botão submit*/
+                $form->get('send')->setAttribute('value', 'Editar');
+                $this->tableGateway->update($data, array('id' => $id));
+            } else {
+                throw new \Exception('Beer não existe');
+            }
+
+            return new ViewModel(
+                array('form' => $form)
+            );
          }
      }
 

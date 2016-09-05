@@ -14,6 +14,15 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
+    private $tableGateway;
+
+    private function getTableGateway() {
+        if (!$this->tableGateway) {
+            $this->tableGateway = $this->getServiceLocator()->get('Application\Model\BeerTableGateway');
+        }
+        return $this->tableGateway;
+    }
+
     public function indexAction()
     {
         $beers = $this->getServiceLocator()
@@ -34,11 +43,12 @@ class IndexController extends AbstractActionController
     public function insertAction()
     {
         $form = $this->getServiceLocator()->get('Application\Form\Beer');
-        $form->setAttribute('action', '/insert');
         $tableGateway = $this->getServiceLocator()->get('Application\Model\BeerTableGateway');
         $beer = new \Application\Model\Beer;
         $request = $this->getRequest();
+        
         if ($request->isPost()) {
+            $form->setAttribute('action', '/insert');
             $form->setInputFilter($beer->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
@@ -53,6 +63,39 @@ class IndexController extends AbstractActionController
             }
         }
 
+        $id = (int) $this->params()->fromRoute('id', 0);
+        //é uma atualização  
+        if ($id > 0) {
+            /* busca a entidade no banco de dados*/
+            $beer = $tableGateway->get($id);
+
+            /* preenche o formulário com os dados do\
+            banco de dados*/
+            $form->bind($beer);
+
+            $url = 'insert/' . $id;
+
+            /* muda o texto do botão submit*/
+            $form->get('send')->setAttribute('value', 'Editar');
+            $form->setAttribute('action', $id);
+        }
+
         return new ViewModel(['beerForm' => $form]);
+    }
+
+        /**
+    * Exclui um post
+    * @return void
+    */
+    public function deleteAction()
+    {
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if ($id == 0) {
+            throw new \Exception("Código obrigatório");
+        }
+        /* remove o registro e redireciona para a página inicial*/
+        $tableGateway = $this->getTableGateway()->delete($id);
+        
+        return $this->redirect()->toUrl('/');
     }
 }
