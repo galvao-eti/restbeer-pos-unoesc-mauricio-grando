@@ -1,23 +1,19 @@
 <?php
 namespace Application\Model;
 
-class BeerTableGateway
- {
+class BeerTableGateway {
      protected $tableGateway;
 
-     public function __construct($tableGateway)
-     {
+     public function __construct($tableGateway) {
          $this->tableGateway = $tableGateway;
      }
 
-     public function fetchAll()
-     {
+     public function fetchAll() {
          $resultSet = $this->tableGateway->select();
          return $resultSet;
      }
 
-     public function get($id)
-     {
+     public function get($id) {
          $id  = (int) $id;
          $rowset = $this->tableGateway->select(array('id' => $id));
          $row = $rowset->current();
@@ -27,8 +23,8 @@ class BeerTableGateway
          return $row;
      }
 
-     public function save(Beer $beer)
-     {
+     public function save(Beer $beer) {
+
          $data = array(
              'name'  => $beer->name,
              'style'  => $beer->style,
@@ -43,10 +39,8 @@ class BeerTableGateway
             $beer = $tableGateway->get($id);
 
             if ($this->get($id)) {
-                $form->bind($beer);
-                /* muda o texto do botão submit*/
-                $form->get('send')->setAttribute('value', 'Editar');
                 $this->tableGateway->update($data, array('id' => $id));
+                
             } else {
                 throw new \Exception('Beer não existe');
             }
@@ -57,8 +51,8 @@ class BeerTableGateway
          }
      }
 
-     public function delete($id)
-     {
+     public function delete($id) {
          $this->tableGateway->delete(array('id' => (int) $id));
      }
+
  }

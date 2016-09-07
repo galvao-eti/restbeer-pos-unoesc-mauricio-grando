@@ -1,11 +1,4 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
 
 namespace Application\Controller;
 
@@ -31,24 +24,17 @@ class IndexController extends AbstractActionController
         return new ViewModel(array('beers' => $beers));
     }
 
-    public function createAction()
-    {
-        $form = $this->getServiceLocator()->get('Application\Form\Beer');
-        $form->setAttribute('action', '/insert');
-        $form->get('send')->setAttribute('value', 'Salvar');
-
-        return new ViewModel(['beerForm' => $form]);
-    }
-
     public function insertAction()
     {
         $form = $this->getServiceLocator()->get('Application\Form\Beer');
         $tableGateway = $this->getServiceLocator()->get('Application\Model\BeerTableGateway');
         $beer = new \Application\Model\Beer;
         $request = $this->getRequest();
+        $form->setAttribute('action', '/insert');
+        $form->get('send')->setAttribute('value', 'Salvar');
         
         if ($request->isPost()) {
-            $form->setAttribute('action', '/insert');
+            
             $form->setInputFilter($beer->getInputFilter());
             $form->setData($request->getPost());
             if ($form->isValid()) {
@@ -73,11 +59,8 @@ class IndexController extends AbstractActionController
             banco de dados*/
             $form->bind($beer);
 
-            $url = 'insert/' . $id;
-
             /* muda o texto do botão submit*/
             $form->get('send')->setAttribute('value', 'Editar');
-            $form->setAttribute('action', $id);
         }
 
         return new ViewModel(['beerForm' => $form]);

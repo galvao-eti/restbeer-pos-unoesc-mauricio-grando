@@ -3,8 +3,8 @@ namespace Application\Model;
 
 use Zend\InputFilter\InputFilter;
 
-class Beer
-{
+class Beer {
+
     public $id;
     public $name;
     public $style;
@@ -15,8 +15,7 @@ class Beer
      *
      * @return Zend\InputFilter\InputFilter
      */
-    public function getInputFilter()
-    {
+    public function getInputFilter() {
         $inputFilter = new InputFilter();
 
         $inputFilter->add(array(
@@ -82,11 +81,11 @@ class Beer
     }
 
     //usado pelo TableGateway
-    public function exchangeArray($data)
-    {
-        $this->id     = (!empty($data['id'])) ? $data['id'] : null;
+    public function exchangeArray($data) {
+        $this->id = (!empty($data['id'])) ? $data['id'] : null;
         $this->name = (!empty($data['name'])) ? $data['name'] : null;
         $this->style  = (!empty($data['style'])) ? $data['style'] : null;
         $this->img  = (!empty($data['img'])) ? $data['img'] : null;
     }
+    
 }
