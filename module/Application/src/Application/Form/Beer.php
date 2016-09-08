@@ -12,6 +12,10 @@ class Beer extends Form
         parent::__construct();
 
         $this->add([
+            'name' => 'id',
+            'type'  => 'hidden',
+        ]);
+        $this->add([
             'name' => 'name',
             'options' => [
                 'label' => 'Beer name',

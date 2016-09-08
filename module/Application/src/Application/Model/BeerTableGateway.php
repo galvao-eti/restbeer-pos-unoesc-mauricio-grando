@@ -36,18 +36,13 @@ class BeerTableGateway {
             $this->tableGateway->insert($data);
 
          } else {
-            $beer = $tableGateway->get($id);
-
-            if ($this->get($id)) {
+            
+            if ($id) {
                 $this->tableGateway->update($data, array('id' => $id));
                 
             } else {
                 throw new \Exception('Beer não existe');
             }
-
-            return new ViewModel(
-                array('form' => $form)
-            );
          }
      }
 
